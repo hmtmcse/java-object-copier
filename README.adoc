@@ -19,3 +19,10 @@ Custom Mapping allows mapping field manually.
 . DTO Object to Entity
 . DTO Object to DTO
 . Entity Object to Entity
+
+
+== Table Manager
+. Read Data from excel
+. Read Data from csv
+. Write Data to excel
+. Write Data to csv
