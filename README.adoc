@@ -7,6 +7,9 @@ called override which allow user to override annotation using other direction.
 
 == Validation From Java x
 
+== Custom Mapping
+Custom Mapping allows mapping field manually.
+
 == Cases
 . Entity Object to DTO
 . DTO Object to Entity

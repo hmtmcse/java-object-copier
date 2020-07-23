@@ -21,6 +21,7 @@ dependencies {
             compile project(":" + it)
         }
     }
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 }
 
 Boolean isPublish = false
