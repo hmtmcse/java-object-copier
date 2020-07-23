@@ -1,0 +1,14 @@
+= Java Object Copier
+
+This section object is that, it can copy one object to another object, depending on annotation, there also be an option
+called override which allow user to override annotation using other direction.
+
+. DataMapping
+
+== Validation From Java x
+
+== Cases
+. Entity Object to DTO
+. DTO Object to Entity
+. DTO Object to DTO
+. Entity Object to Entity
