@@ -6,6 +6,10 @@ called override which allow user to override annotation using other direction.
 . DataMapping
 
 == Validation From Java x
+. Validate source
+. Assign to destination
+. Validate Destination
+. Throw error with KeyValue Format, source and destination.
 
 == Custom Mapping
 Custom Mapping allows mapping field manually.
