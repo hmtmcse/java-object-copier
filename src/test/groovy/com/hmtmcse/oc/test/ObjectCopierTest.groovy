@@ -10,7 +10,7 @@ class ObjectCopierTest extends Specification {
     @Shared
     ObjectCopier objectCopier = new ObjectCopier()
 
-    def "Test copy"() {
+    def "Test Parent Child Private copy"() {
         when:
         MySon mySon = new MySon()
         mySon.setGrandFatherName("Babul Mia")

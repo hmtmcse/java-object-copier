@@ -95,7 +95,7 @@ public class ReflectionProcessor {
         return null;
     }
 
-    public Boolean isPrimitive(Class c) {
+    public Boolean isPrimitive(Class<?> c) {
         return c.isPrimitive() || c == String.class || c == Boolean.class
                 || c == Byte.class || c == Short.class || c == Character.class
                 || c == Integer.class || c == Float.class || c == Double.class
@@ -103,12 +103,12 @@ public class ReflectionProcessor {
     }
 
 
-    public Boolean isList(Class c) {
+    public Boolean isList(Class<?> c) {
         return c == List.class;
     }
 
 
-    public Boolean isMap(Class c) {
+    public Boolean isMap(Class<?> c) {
         return c == Map.class || c == LinkedHashMap.class
                 || c == HashMap.class
                 || c == SortedMap.class
