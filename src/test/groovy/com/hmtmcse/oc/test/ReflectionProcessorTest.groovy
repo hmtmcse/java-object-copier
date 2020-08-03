@@ -24,6 +24,22 @@ class ReflectionProcessorTest extends Specification {
             klasses.remove(klass.getSimpleName())
         }
         assert klasses.size() == 0
+        println("\n")
+    }
+
+    def "Test All Class"() {
+        when:
+        List<Class<?>> list = reflectionProcessor.getAllClass(MySon.class)
+
+        then:
+        def klasses = ["MySon", "Father", "GrandFather", "MySelf", "Object"]
+        list.each { Class<?> klass ->
+            println(klass.getSimpleName())
+            assert klasses.contains(klass.getSimpleName())
+            klasses.remove(klass.getSimpleName())
+        }
+        assert klasses.size() == 0
+        println("\n")
     }
 
 }
