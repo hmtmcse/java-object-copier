@@ -1,0 +1,7 @@
+
+. Class Object
+. List, collection, set
+. Map
+. LocalDate
+. LocalDateTime
+. Primitive

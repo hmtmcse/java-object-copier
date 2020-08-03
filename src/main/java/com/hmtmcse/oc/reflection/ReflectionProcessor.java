@@ -2,9 +2,9 @@ package com.hmtmcse.oc.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class ReflectionProcessor {
 
@@ -41,8 +41,12 @@ public class ReflectionProcessor {
     }
 
     private Field getDeclaredField(Object object, String fieldName) {
+        return getDeclaredField(object.getClass(), fieldName);
+    }
+
+    private Field getDeclaredField(Class<?> klass, String fieldName) {
         try {
-            return object.getClass().getDeclaredField(fieldName);
+            return klass.getDeclaredField(fieldName);
         } catch (NoSuchFieldException ignore) {
         }
         return null;
@@ -67,6 +71,21 @@ public class ReflectionProcessor {
         return field;
     }
 
+    public Field getAllFieldFromObject(Object object, String fieldName) {
+        Field field = getFieldFromObject(object, fieldName);
+        if (field == null) {
+            Class<?> superclass = object.getClass().getSuperclass();
+            while (superclass != null) {
+                field = getDeclaredField(superclass, fieldName);
+                if (field != null) {
+                    return field;
+                }
+                superclass = superclass.getSuperclass();
+            }
+        }
+        return field;
+    }
+
 
     public <D> D newInstance(Class<D> klass) {
         try {
@@ -74,6 +93,26 @@ public class ReflectionProcessor {
         } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignore) {
         }
         return null;
+    }
+
+    public Boolean isPrimitive(Class c) {
+        return c.isPrimitive() || c == String.class || c == Boolean.class
+                || c == Byte.class || c == Short.class || c == Character.class
+                || c == Integer.class || c == Float.class || c == Double.class
+                || c == LocalDate.class || c == LocalDateTime.class || c == Date.class || c == Long.class;
+    }
+
+
+    public Boolean isList(Class c) {
+        return c == List.class;
+    }
+
+
+    public Boolean isMap(Class c) {
+        return c == Map.class || c == LinkedHashMap.class
+                || c == HashMap.class
+                || c == SortedMap.class
+                || c == TreeMap.class;
     }
 
 
