@@ -7,13 +7,13 @@ public class ObjectCopier {
     public Boolean isValidateSource = true;
     public Boolean isValidateDestination = true;
 
-    public ObjectCopier setValidateSource(Boolean validateSource) {
-        isValidateSource = validateSource;
+    public ObjectCopier disableValidateSource() {
+        isValidateSource = false;
         return this;
     }
 
-    public ObjectCopier setValidateDestination(Boolean validateDestination) {
-        isValidateDestination = validateDestination;
+    public ObjectCopier disableValidateDestination() {
+        isValidateDestination = false;
         return this;
     }
 
