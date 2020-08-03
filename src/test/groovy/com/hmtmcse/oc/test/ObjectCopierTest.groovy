@@ -6,6 +6,9 @@ import com.hmtmcse.oc.test.data.parentchild.MySon
 import spock.lang.Shared
 import spock.lang.Specification
 
+import java.time.LocalDate
+import java.time.LocalDateTime
+
 class ObjectCopierTest extends Specification {
 
     @Shared
@@ -59,9 +62,20 @@ class ObjectCopierTest extends Specification {
         objectAndPrimitive.aChar = 'x'
         objectAndPrimitive.aBoolean = true
 
+        objectAndPrimitive.bigDecimal = 99999999.99999999
+        objectAndPrimitive.bigInteger = 99999999
+
+        objectAndPrimitive.dateType = new Date()
+        objectAndPrimitive.localDateTimeType = LocalDateTime.now()
+        objectAndPrimitive.localDateType = LocalDate.now()
+
 
         then:
         ObjectAndPrimitive copy = objectCopier.copy(objectAndPrimitive, ObjectAndPrimitive.class)
+
+        assert copy.dateType == objectAndPrimitive.dateType
+        assert copy.localDateTimeType == objectAndPrimitive.localDateTimeType
+        assert copy.localDateType == objectAndPrimitive.localDateType
 
         assert copy.stringType == "String Type"
         assert copy.integerType == 1000
@@ -81,6 +95,9 @@ class ObjectCopierTest extends Specification {
         assert copy.aDouble == 99.99
         assert copy.aChar == 'x'
         assert copy.aBoolean
+
+        assert copy.bigDecimal == 99999999.99999999
+        assert copy.bigInteger == 99999999
 
     }
 
