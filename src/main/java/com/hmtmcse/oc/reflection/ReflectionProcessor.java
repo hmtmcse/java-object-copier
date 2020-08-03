@@ -67,6 +67,7 @@ public class ReflectionProcessor {
         return field;
     }
 
+
     public <D> D newInstance(Class<D> klass) {
         try {
             return klass.getDeclaredConstructor().newInstance();

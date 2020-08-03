@@ -5,6 +5,8 @@ import com.hmtmcse.oc.test.data.parentchild.MySon
 import spock.lang.Shared
 import spock.lang.Specification
 
+import java.lang.reflect.Field
+
 
 class ReflectionProcessorTest extends Specification {
 
@@ -12,7 +14,7 @@ class ReflectionProcessorTest extends Specification {
     ReflectionProcessor reflectionProcessor = new ReflectionProcessor()
 
 
-    def "Test All Super Class"() {
+    def "Test Get All Super Class"() {
         when:
         List<Class<?>> list = reflectionProcessor.getAllSuperClass(MySon.class)
 
@@ -27,7 +29,7 @@ class ReflectionProcessorTest extends Specification {
         println("\n")
     }
 
-    def "Test All Class"() {
+    def "Test Get All Class"() {
         when:
         List<Class<?>> list = reflectionProcessor.getAllClass(MySon.class)
 
@@ -40,6 +42,23 @@ class ReflectionProcessorTest extends Specification {
         }
         assert klasses.size() == 0
         println("\n")
+    }
+
+    def "Test getAllField"(){
+
+        when:
+        List<Field> list = reflectionProcessor.getAllField(MySon.class)
+
+        then:
+        def names = ["grandFatherName", "fatherName", "myName", "sonName"]
+        list.each { Field field ->
+            println(field.getName())
+            assert names.contains(field.getName())
+            names.remove(field.getName())
+        }
+        assert names.size() == 0
+        println("\n")
+
     }
 
 }
