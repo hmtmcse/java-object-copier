@@ -75,13 +75,20 @@ public class ObjectCopier {
         } else if (reflectionProcessor.isList(field.getType())) {
 
         } else {
-            return copy(field.get(object), field.getType(), field.getName());
+            Object nestedObject = field.get(object);
+            if (nestedObject != null) {
+                return copy(nestedObject, field.getType(), field.getName());
+            }
         }
         return null;
     }
 
     public <D> D copy(Object source, Class<D> destination, String nestedKey) throws ObjectCopierException {
         try {
+            if (source == null) {
+                return null;
+            }
+
             D newInstance = reflectionProcessor.newInstance(destination);
             Field newField;
             for (Field objectField : reflectionProcessor.getAllField(source.getClass())) {
@@ -93,6 +100,7 @@ public class ObjectCopier {
             }
             return newInstance;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ObjectCopierException(e.getMessage());
         }
     }

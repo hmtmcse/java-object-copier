@@ -1,7 +1,5 @@
 package com.hmtmcse.oc.test.data.datatype;
 
-import com.hmtmcse.oc.test.data.Gender;
-import com.hmtmcse.oc.test.data.Student;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -21,6 +19,16 @@ public class ObjectAndPrimitive {
     public Boolean booleanType;
     public Character character;
 
+    public String stringTypeNull;
+    public Integer integerTypeNull;
+    public Short shortTypeNull;
+    public Long longTypeNull;
+    public Double doubleTypeNull;
+    public Float floatTypeNull;
+    public Byte byteTypeNull;
+    public Boolean booleanTypeNull;
+    public Character characterNull;
+
     public Date dateType;
     public LocalDate localDateType;
     public LocalDateTime localDateTimeType;
@@ -32,8 +40,8 @@ public class ObjectAndPrimitive {
     public short aShort;
     public int anInt;
     public long aLong;
-    public float aFloat;
-    public double aDouble;
+    public float aFloat  = 2.1f;
+    public double aDouble = 86;
     public char aChar;
     public boolean aBoolean;
 }
