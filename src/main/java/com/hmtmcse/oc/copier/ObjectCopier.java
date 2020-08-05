@@ -74,6 +74,10 @@ public class ObjectCopier {
 
         } else if (reflectionProcessor.isList(field.getType())) {
 
+        } else if (reflectionProcessor.isSet(field.getType())) {
+
+        } else if (reflectionProcessor.isQueue(field.getType())) {
+
         } else {
             Object nestedObject = field.get(object);
             if (nestedObject != null) {

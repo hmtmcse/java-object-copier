@@ -1,5 +1,7 @@
 package com.hmtmcse.oc.reflection;
 
+import com.sun.jmx.remote.internal.ArrayQueue;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -7,6 +9,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.DelayQueue;
 
 public class ReflectionProcessor {
 
@@ -23,7 +26,7 @@ public class ReflectionProcessor {
     }
 
     public List<Class<?>> getAllClass(Class<?> klass) {
-        if (klass == null){
+        if (klass == null) {
             return new ArrayList<>();
         }
         List<Class<?>> classes = getAllSuperClass(klass);
@@ -98,25 +101,52 @@ public class ReflectionProcessor {
     }
 
     public Boolean isPrimitive(Class<?> c) {
-        return c.isPrimitive() || c == String.class || c == Boolean.class
-                || c == Byte.class || c == Short.class || c == Character.class
-                || c == Integer.class || c == Float.class || c == Double.class
-                || c == BigDecimal.class || c == BigInteger.class
+        return c.isPrimitive() || c == String.class || c == Boolean.class || c == Byte.class || c == Short.class || c == Character.class
+                || c == Integer.class || c == Float.class || c == Double.class || c == BigDecimal.class || c == BigInteger.class
                 || c == LocalDate.class || c == LocalDateTime.class || c == Date.class || c == Long.class;
     }
 
 
     public Boolean isList(Class<?> c) {
-        return c == List.class;
+        return c == List.class || c == Collection.class || c == LinkedList.class || c == ArrayList.class || c == Vector.class || c == Stack.class;
     }
 
+    public Boolean isSet(Class<?> c) {
+        return c == TreeSet.class || c == Set.class || c == LinkedHashSet.class || c == HashSet.class || c == SortedSet.class;
+    }
+
+    public Boolean isQueue(Class<?> c) {
+        return c == Queue.class || c == PriorityQueue.class || c == Deque.class || c == ArrayQueue.class;
+    }
 
     public Boolean isMap(Class<?> c) {
-        return c == Map.class || c == LinkedHashMap.class
-                || c == HashMap.class
-                || c == SortedMap.class
-                || c == TreeMap.class;
+        return c == Map.class || c == LinkedHashMap.class || c == HashMap.class || c == SortedMap.class || c == TreeMap.class;
     }
 
+    public Collection<?> instanceOfList(Class<?> c) {
+        if (c == LinkedList.class) {
+            return new LinkedList<>();
+        } else if (c == Vector.class) {
+            return new Vector<>();
+        } else if (c == Stack.class) {
+            return new Stack<>();
+        }
+        return new ArrayList<>();
+    }
+
+    public void instanceOfQueue(Class<?> c) {
+    }
+
+    public void instanceOfSet(Class<?> c) {
+    }
+
+    public Map<?, ?> instanceOfMap(Class<?> c) {
+        if (c == HashMap.class) {
+            return new HashMap<>();
+        } else if (c == TreeMap.class || c == SortedMap.class) {
+            return new TreeMap<>();
+        }
+        return new LinkedHashMap<>();
+    }
 
 }
