@@ -134,10 +134,20 @@ public class ReflectionProcessor {
         return new ArrayList<>();
     }
 
-    public void instanceOfQueue(Class<?> c) {
+    public Queue<?> instanceOfQueue(Class<?> c) {
+        if (c == ArrayDeque.class || c == Deque.class) {
+            return new ArrayDeque<>();
+        }
+        return new PriorityQueue<>();
     }
 
-    public void instanceOfSet(Class<?> c) {
+    public Set<?> instanceOfSet(Class<?> c) {
+        if (c == TreeSet.class || c == SortedSet.class) {
+            return new TreeSet<>();
+        } else if (c == HashSet.class) {
+            return new HashSet<>();
+        }
+        return new LinkedHashSet<>();
     }
 
     public Map<?, ?> instanceOfMap(Class<?> c) {
