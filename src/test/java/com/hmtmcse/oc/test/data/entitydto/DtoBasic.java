@@ -7,5 +7,5 @@ public class DtoBasic {
     public Long id;
 
     @DataMapping(source = "name")
-    public String name;
+    public String other;
 }

@@ -2,6 +2,8 @@ package com.hmtmcse.oc.test
 
 import com.hmtmcse.oc.copier.ObjectCopier
 import com.hmtmcse.oc.test.data.datatype.ObjectAndPrimitive
+import com.hmtmcse.oc.test.data.entitydto.DtoBasic
+import com.hmtmcse.oc.test.data.entitydto.EntityBasic
 import com.hmtmcse.oc.test.data.maplist.MapListSetQueue
 import com.hmtmcse.oc.test.data.parentchild.MySon
 import spock.lang.Shared
@@ -115,8 +117,27 @@ class ObjectCopierTest extends Specification {
     }
 
     def "Test Entity to DTO copy"() {
+        when:
+        EntityBasic entityBasic = new EntityBasic()
+        entityBasic.name = "Bismillah"
+        entityBasic.id =  12345;
+
+        then:
+        DtoBasic dtoBasic = objectCopier.copy(entityBasic, DtoBasic.class)
+        assert dtoBasic.other == entityBasic.name
 
     }
 
+    def "Test DTO to Entity copy"() {
+        when:
+        DtoBasic dtoBasic = new DtoBasic()
+        dtoBasic.other = "Bismillah"
+        dtoBasic.id =  12345;
+
+        then:
+        EntityBasic entityBasic = objectCopier.copy(dtoBasic, EntityBasic.class)
+        assert dtoBasic.other == entityBasic.name
+
+    }
 
 }

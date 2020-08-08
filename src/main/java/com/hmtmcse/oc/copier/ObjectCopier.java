@@ -58,6 +58,10 @@ public class ObjectCopier {
     }
 
     private String getSourceFieldName(Field field) {
+        return getSourceFieldName(field, false);
+    }
+
+    private String getSourceFieldName(Field field, Boolean isStrictAnnotationCheck) {
         if (field.getAnnotation(DataMapping.class) != null) {
             String name = field.getAnnotation(DataMapping.class).source();
             if (!name.isEmpty()) {
@@ -77,8 +81,8 @@ public class ObjectCopier {
         } else {
             copySourceDstField.source.setAccessible(true);
         }
-        
-        if (copySourceDstField.destination != null){
+
+        if (copySourceDstField.destination != null) {
             copySourceDstField.destination.setAccessible(true);
         }
 
@@ -91,6 +95,9 @@ public class ObjectCopier {
 
     private CopySourceDstField compareReportAndGetObjectField(Field field, Class<?> klass, String nestedKey) {
         String sourceFieldName = getSourceFieldName(field);
+        if (sourceFieldName == null) {
+            return null;
+        }
         Field objectField = reflectionProcessor.getAnyFieldFromKlass(klass, sourceFieldName);
         return compareReportAndGetObjectField(new CopySourceDstField(field, objectField, sourceFieldName), nestedKey);
     }
@@ -161,7 +168,7 @@ public class ObjectCopier {
         CopySourceDstField copySourceDstField;
         for (Field field : annotatedFields) {
             copySourceDstField = compareReportAndGetObjectField(field, nonAnnotatedObject, nestedKey);
-            if (copySourceDstField.source != null) {
+            if (copySourceDstField != null && copySourceDstField.source != null) {
                 list.add(copySourceDstField);
             }
         }
@@ -173,8 +180,8 @@ public class ObjectCopier {
         CopySourceDstField copySourceDstField;
         for (Field field : annotatedFields) {
             copySourceDstField = compareReportAndGetObjectField(field, nonAnnotatedKlass, nestedKey);
-            if (copySourceDstField.destination != null) {
-                list.add(new CopySourceDstField(copySourceDstField.destination, copySourceDstField.source, copySourceDstField.sourceFieldName));
+            if (copySourceDstField != null && copySourceDstField.destination != null) {
+                list.add(new CopySourceDstField(copySourceDstField.source, copySourceDstField.destination, copySourceDstField.sourceFieldName));
             }
         }
         return list;
@@ -208,18 +215,9 @@ public class ObjectCopier {
 
             D toInstance = reflectionProcessor.newInstance(toKlass);
             List<CopySourceDstField> copySourceDstFields = this.getFieldMapping(fromObject, toKlass, nestedKey);
-            for (CopySourceDstField copySourceDstField : copySourceDstFields){
+            for (CopySourceDstField copySourceDstField : copySourceDstFields) {
                 copySourceDstField.destination.set(toInstance, processAndGetValue(fromObject, copySourceDstField.source));
             }
-
-//            CopySourceDstField copySourceDstField;
-//            for (Field toField : reflectionProcessor.getAllField(toKlass)) {
-//                copySourceDstField = compareReportAndGetObjectField(toField, fromObject, nestedKey);
-//                if (copySourceDstField.destination != null) {
-//                    copySourceDstField.destination.setAccessible(true);
-//                    toField.set(toInstance, processAndGetValue(fromObject, copySourceDstField.destination));
-//                }
-//            }
             return toInstance;
         } catch (Exception e) {
             e.printStackTrace();
