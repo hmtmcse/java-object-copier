@@ -11,10 +11,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class ObjectCopier {
 
@@ -103,8 +100,19 @@ public class ObjectCopier {
     }
 
 
-    private Object processMap(Object object, Field field) {
-        return null;
+    private Object processMap(Object sourceObject, Class<?> destinationProperty) throws IllegalAccessException, ObjectCopierException {
+        if (sourceObject == null || destinationProperty == null) {
+            return null;
+        }
+        Map<?, ?> map = (Map<?, ?>) sourceObject;
+        Map response = reflectionProcessor.instanceOfMap(destinationProperty);
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            response.put(processAndGetValue(entry.getKey(), entry.getKey().getClass()), processAndGetValue(entry.getValue(), entry.getValue().getClass()));
+        }
+        if (response.size() == 0) {
+            return null;
+        }
+        return response;
     }
 
     private Object processList(Object sourceObject, Class<?> destinationProperty) throws IllegalAccessException, ObjectCopierException {
@@ -124,12 +132,38 @@ public class ObjectCopier {
         return response;
     }
 
-    private Object processSet(Object object, Field field) {
-        return null;
+    private Object processSet(Object sourceObject, Class<?> destinationProperty) throws ObjectCopierException, IllegalAccessException {
+        if (sourceObject == null || destinationProperty == null) {
+            return null;
+        }
+        Set<?> list = (Set<?>) sourceObject;
+        Set response = reflectionProcessor.instanceOfSet(destinationProperty);
+        for (Object data : list) {
+            if (data != null) {
+                response.add(processAndGetValue(data, data.getClass()));
+            }
+        }
+        if (response.size() == 0) {
+            return null;
+        }
+        return response;
     }
 
-    private Object processQueue(Object object, Field field) {
-        return null;
+    private Object processQueue(Object sourceObject, Class<?> destinationProperty) throws ObjectCopierException, IllegalAccessException {
+        if (sourceObject == null || destinationProperty == null) {
+            return null;
+        }
+        Queue<?> list = (Queue<?>) sourceObject;
+        Queue response = reflectionProcessor.instanceOfQueue(destinationProperty);
+        for (Object data : list) {
+            if (data != null) {
+                response.add(processAndGetValue(data, data.getClass()));
+            }
+        }
+        if (response.size() == 0) {
+            return null;
+        }
+        return response;
     }
 
 
@@ -139,13 +173,13 @@ public class ObjectCopier {
         } else if (reflectionProcessor.isPrimitive(destinationProperty)) {
             return fieldObject;
         } else if (reflectionProcessor.isMap(destinationProperty)) {
-
+            return processMap(fieldObject, destinationProperty);
         } else if (reflectionProcessor.isList(destinationProperty)) {
             return processList(fieldObject, destinationProperty);
         } else if (reflectionProcessor.isSet(destinationProperty)) {
-
+            return processSet(fieldObject, destinationProperty);
         } else if (reflectionProcessor.isQueue(destinationProperty)) {
-
+            return processQueue(fieldObject, destinationProperty);
         }
         return copy(fieldObject, destinationProperty, destinationProperty.getSimpleName());
     }
