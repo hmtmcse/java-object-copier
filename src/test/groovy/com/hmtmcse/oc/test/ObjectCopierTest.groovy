@@ -114,4 +114,9 @@ class ObjectCopierTest extends Specification {
 
     }
 
+    def "Test Entity to DTO copy"() {
+
+    }
+
+
 }

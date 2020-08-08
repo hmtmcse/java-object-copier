@@ -9,9 +9,9 @@
 ** Destination
 
 
-* ObjectMap annotation inputs
-** Source: Source Field name
-** SourceAlias: Basically use for csv/excel read write, absence of Source field name
+* DataMapping annotation inputs
+** source: Source Field name
+** sourceAlias: Basically use for csv/excel read write, absence of Source field name
 ** SourceOrder: If Source and SourceAlias not available for csv/excel then we can specify SourceOrder by put number
 ** IsCustomCall: It will allow to call the custom method for custom things
 
@@ -25,3 +25,14 @@
 
 * Problems
 ** How to export/import Object Class from/to csv/excel?
+
+
+
+
+
+EntityBasic == CopyTo
+DtoBasic == Value
+
+
+EntityBasic == Value
+DtoBasic == CopyTo

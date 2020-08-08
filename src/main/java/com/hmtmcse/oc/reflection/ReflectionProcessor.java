@@ -66,9 +66,13 @@ public class ReflectionProcessor {
     }
 
     public Field getFieldFromObject(Object object, String fieldName) {
-        Field field = getDeclaredField(object, fieldName);
+        return getFieldFromObject(object.getClass(), fieldName);
+    }
+
+    public Field getFieldFromObject(Class<?> klass, String fieldName) {
+        Field field = getDeclaredField(klass, fieldName);
         if (field == null) {
-            field = getField(object, fieldName);
+            field = getField(klass, fieldName);
         }
         if (field != null) {
             field.setAccessible(true);
@@ -77,9 +81,13 @@ public class ReflectionProcessor {
     }
 
     public Field getAnyFieldFromObject(Object object, String fieldName) {
-        Field field = getFieldFromObject(object, fieldName);
+        return getAnyFieldFromKlass(object.getClass(), fieldName);
+    }
+
+    public Field getAnyFieldFromKlass(Class<?> klass, String fieldName) {
+        Field field = getFieldFromObject(klass, fieldName);
         if (field == null) {
-            Class<?> superclass = object.getClass().getSuperclass();
+            Class<?> superclass = klass.getSuperclass();
             while (superclass != null) {
                 field = getDeclaredField(superclass, fieldName);
                 if (field != null) {
