@@ -6,7 +6,6 @@ import com.hmtmcse.oc.data.CopyReport;
 import com.hmtmcse.oc.data.CopyReportError;
 import com.hmtmcse.oc.data.CopySourceDstField;
 import com.hmtmcse.oc.reflection.ReflectionProcessor;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -259,27 +258,6 @@ public class ObjectCopier {
         }
     }
 
-    public <D> D copy2(Object fromObject, Class<D> toKlass, String nestedKey) throws ObjectCopierException {
-        try {
-            if (fromObject == null) {
-                return null;
-            }
-
-            D toInstance = reflectionProcessor.newInstance(toKlass);
-            CopySourceDstField copySourceDstField;
-            for (Field toField : reflectionProcessor.getAllField(toKlass)) {
-                copySourceDstField = compareReportAndGetObjectField(toField, fromObject, nestedKey);
-                if (copySourceDstField.destination != null) {
-                    copySourceDstField.destination.setAccessible(true);
-                    toField.set(toInstance, processAndGetValue(fromObject, copySourceDstField.destination));
-                }
-            }
-            return toInstance;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ObjectCopierException(e.getMessage());
-        }
-    }
 
     public <D> D copy(Object source, Class<D> destination) throws ObjectCopierException {
         return copy(source, destination, null);

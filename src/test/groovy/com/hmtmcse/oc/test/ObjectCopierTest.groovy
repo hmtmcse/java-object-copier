@@ -116,6 +116,20 @@ class ObjectCopierTest extends Specification {
 
     }
 
+    def "Test Map copy"() {
+        when:
+        MapListSetQueue mapListSetQueue = new MapListSetQueue()
+        mapListSetQueue.stringMap = new LinkedHashMap<>()
+        mapListSetQueue.stringMap.put("data-1", "Data 1")
+        mapListSetQueue.stringMap.put("data-2", "Data 2")
+        mapListSetQueue.stringMap.put("data-3", "Data 3")
+
+        then:
+        MapListSetQueue copied = objectCopier.copy(mapListSetQueue, MapListSetQueue.class)
+        assert copied.stringMap
+
+    }
+
     def "Test Entity to DTO copy"() {
         when:
         EntityBasic entityBasic = new EntityBasic()
