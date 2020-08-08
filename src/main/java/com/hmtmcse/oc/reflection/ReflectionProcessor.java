@@ -1,7 +1,5 @@
 package com.hmtmcse.oc.reflection;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -9,7 +7,6 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.DelayQueue;
 
 public class ReflectionProcessor {
 
@@ -124,7 +121,7 @@ public class ReflectionProcessor {
     }
 
     public Boolean isQueue(Class<?> c) {
-        return c == Queue.class || c == PriorityQueue.class || c == Deque.class || c == ArrayQueue.class;
+        return c == Queue.class || c == PriorityQueue.class || c == Deque.class;
     }
 
     public Boolean isMap(Class<?> c) {
