@@ -76,7 +76,7 @@ public class ReflectionProcessor {
         return field;
     }
 
-    public Field getAllFieldFromObject(Object object, String fieldName) {
+    public Field getAnyFieldFromObject(Object object, String fieldName) {
         Field field = getFieldFromObject(object, fieldName);
         if (field == null) {
             Class<?> superclass = object.getClass().getSuperclass();

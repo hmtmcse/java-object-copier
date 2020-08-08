@@ -1,0 +1,27 @@
+* Copy Entity to DTO
+* Copy DTO to Entity
+* Export to CSV
+* Import from CSV
+* Export to Excel
+* Import from Excel
+* Object Validation
+** Source
+** Destination
+
+
+* ObjectMap annotation inputs
+** Source: Source Field name
+** SourceAlias: Basically use for csv/excel read write, absence of Source field name
+** SourceOrder: If Source and SourceAlias not available for csv/excel then we can specify SourceOrder by put number
+** IsCustomCall: It will allow to call the custom method for custom things
+
+* Copy Process
+** Scan Annotation
+*** If found ObjectMap annotation in destination then skip source scan
+*** If not found Destination annotation then scan source and active it
+*** If there is no annotation then map the object according match name and type
+
+* Custom Call back
+
+* Problems
+** How to export/import Object Class from/to csv/excel?

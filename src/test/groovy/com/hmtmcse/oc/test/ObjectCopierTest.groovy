@@ -5,7 +5,6 @@ import com.hmtmcse.oc.test.data.datatype.ObjectAndPrimitive
 import com.hmtmcse.oc.test.data.parentchild.MySon
 import spock.lang.Shared
 import spock.lang.Specification
-
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -13,6 +12,19 @@ class ObjectCopierTest extends Specification {
 
     @Shared
     ObjectCopier objectCopier = new ObjectCopier()
+
+//    def "Test Collection Data Type"(){
+//        when:
+//        MapListSetQueue mapListSetQueue = new MapListSetQueue()
+//        mapListSetQueue.stringList = new ArrayList<>()
+//        mapListSetQueue.stringList.add("String List 1")
+//        mapListSetQueue.stringList.add("String List 2")
+//        mapListSetQueue.stringList.add("String List 3")
+//
+//        then:
+//        MapListSetQueue copied = objectCopier.copy(mapListSetQueue, MapListSetQueue.class)
+//        assert copied.stringList
+//    }
 
     def "Test Parent Child Private copy"() {
         when:
