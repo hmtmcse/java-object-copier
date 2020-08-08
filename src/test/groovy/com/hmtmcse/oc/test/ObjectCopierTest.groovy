@@ -2,6 +2,7 @@ package com.hmtmcse.oc.test
 
 import com.hmtmcse.oc.copier.ObjectCopier
 import com.hmtmcse.oc.test.data.datatype.ObjectAndPrimitive
+import com.hmtmcse.oc.test.data.maplist.MapListSetQueue
 import com.hmtmcse.oc.test.data.parentchild.MySon
 import spock.lang.Shared
 import spock.lang.Specification
@@ -13,18 +14,18 @@ class ObjectCopierTest extends Specification {
     @Shared
     ObjectCopier objectCopier = new ObjectCopier()
 
-//    def "Test Collection Data Type"(){
-//        when:
-//        MapListSetQueue mapListSetQueue = new MapListSetQueue()
-//        mapListSetQueue.stringList = new ArrayList<>()
-//        mapListSetQueue.stringList.add("String List 1")
-//        mapListSetQueue.stringList.add("String List 2")
-//        mapListSetQueue.stringList.add("String List 3")
-//
-//        then:
-//        MapListSetQueue copied = objectCopier.copy(mapListSetQueue, MapListSetQueue.class)
-//        assert copied.stringList
-//    }
+    def "Test Collection Data Type"(){
+        when:
+        MapListSetQueue mapListSetQueue = new MapListSetQueue()
+        mapListSetQueue.stringList = new ArrayList<>()
+        mapListSetQueue.stringList.add("String List 1")
+        mapListSetQueue.stringList.add("String List 2")
+        mapListSetQueue.stringList.add("String List 3")
+
+        then:
+        MapListSetQueue copied = objectCopier.copy(mapListSetQueue, MapListSetQueue.class)
+        assert copied.stringList
+    }
 
     def "Test Parent Child Private copy"() {
         when:
