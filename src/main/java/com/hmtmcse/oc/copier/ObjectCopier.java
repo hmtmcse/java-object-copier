@@ -6,9 +6,8 @@ import com.hmtmcse.oc.data.CopyReport;
 import com.hmtmcse.oc.data.CopyReportError;
 import com.hmtmcse.oc.data.CopySourceDstField;
 import com.hmtmcse.oc.reflection.ReflectionProcessor;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+
+import javax.validation.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -37,10 +36,16 @@ public class ObjectCopier {
         return this.errorReports;
     }
 
-    private void validateObject(Object object) {
+    public void validateObject(Object object) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        validator.validate(object);
+        Set<ConstraintViolation<Object>> violations = validator.validate(object);
+        for (ConstraintViolation<Object> violation : violations) {
+            System.out.println(violation.getMessage() + " ");
+            for (Path.Node node : violation.getPropertyPath()){
+                node.getName();
+            }
+        }
     }
 
     private void addReport(String name, String errorType, String nestedKey) {
