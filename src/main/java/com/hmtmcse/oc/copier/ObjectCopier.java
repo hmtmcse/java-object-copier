@@ -246,14 +246,25 @@ public class ObjectCopier {
         return mapCommonField(toKlassFields, fromObject, nestedKey);
     }
 
+    public <D> D copy(Object source, Class<D> destination) throws ObjectCopierException {
+        return copy(source, destination, null);
+    }
+
+    public <D> D copy(Object source, D destination) throws ObjectCopierException {
+        return copy(source, destination, null);
+    }
+
     public <D> D copy(Object fromObject, Class<D> toKlass, String nestedKey) throws ObjectCopierException {
+        D toInstance = reflectionProcessor.newInstance(toKlass);
+        return copy(fromObject, toInstance, nestedKey);
+    }
+
+    public <D> D copy(Object fromObject, D toInstance, String nestedKey) throws ObjectCopierException {
         try {
             if (fromObject == null) {
                 return null;
             }
-
-            D toInstance = reflectionProcessor.newInstance(toKlass);
-            List<CopySourceDstField> copySourceDstFields = this.getFieldMapping(fromObject, toKlass, nestedKey);
+            List<CopySourceDstField> copySourceDstFields = this.getFieldMapping(fromObject, toInstance.getClass(), nestedKey);
             for (CopySourceDstField copySourceDstField : copySourceDstFields) {
                 copySourceDstField.destination.set(toInstance, processAndGetValue(fromObject, copySourceDstField.source));
             }
@@ -262,11 +273,6 @@ public class ObjectCopier {
             e.printStackTrace();
             throw new ObjectCopierException(e.getMessage());
         }
-    }
-
-
-    public <D> D copy(Object source, Class<D> destination) throws ObjectCopierException {
-        return copy(source, destination, null);
     }
 
 }
