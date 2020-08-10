@@ -4,6 +4,7 @@ import com.hmtmcse.oc.copier.ObjectCopier
 import com.hmtmcse.oc.test.data.datatype.ObjectAndPrimitive
 import com.hmtmcse.oc.test.data.entitydto.DtoBasic
 import com.hmtmcse.oc.test.data.entitydto.EntityBasic
+import com.hmtmcse.oc.test.data.entitydto.ValidationDto
 import com.hmtmcse.oc.test.data.maplist.MapListSetQueue
 import com.hmtmcse.oc.test.data.parentchild.MySon
 import spock.lang.Shared
@@ -151,7 +152,17 @@ class ObjectCopierTest extends Specification {
         then:
         EntityBasic entityBasic = objectCopier.copy(dtoBasic, EntityBasic.class)
         assert dtoBasic.other == entityBasic.name
+    }
 
+    def "Test validation basic"(){
+        when:
+        ValidationDto validationDto = new ValidationDto()
+        validationDto.name = "Mia"
+        validationDto.email = "mia.com"
+
+        then:
+        objectCopier.validateObject(validationDto)
+        assert true
     }
 
 }

@@ -36,16 +36,17 @@ public class ObjectCopier {
         return this.errorReports;
     }
 
-    public void validateObject(Object object) {
+    public LinkedHashMap<String, String> validateObject(Object object) {
+        LinkedHashMap<String, String> errors = new LinkedHashMap<>();
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<Object>> violations = validator.validate(object);
         for (ConstraintViolation<Object> violation : violations) {
-            System.out.println(violation.getMessage() + " ");
             for (Path.Node node : violation.getPropertyPath()){
-                node.getName();
+                errors.put(node.getName(), violation.getMessage());
             }
         }
+        return errors;
     }
 
     private void addReport(String name, String errorType, String nestedKey) {
