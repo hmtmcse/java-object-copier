@@ -8,4 +8,6 @@ public class DtoBasic {
 
     @DataMapping(source = "name")
     public String other;
+
+    public String email;
 }

@@ -74,7 +74,6 @@ public class ObjectCopier {
     }
 
     private CopySourceDstField compareReportAndGetObjectField(CopySourceDstField copySourceDstField, String nestedKey) {
-        copySourceDstField.source.setAccessible(true);
         if (copySourceDstField.source == null) {
             addReport(copySourceDstField.sourceFieldName, CopyReportError.DST_PROPERTY_UNAVAILABLE.label, nestedKey);
         } else if (copySourceDstField.source.getType() != copySourceDstField.destination.getType()) {

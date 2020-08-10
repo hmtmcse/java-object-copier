@@ -165,4 +165,21 @@ class ObjectCopierTest extends Specification {
         assert true
     }
 
+    def "Test Object Entity to DTO copy"() {
+        when:
+        EntityBasic entityBasic = new EntityBasic()
+        entityBasic.name = "Bismillah"
+        entityBasic.id =  12345;
+
+        DtoBasic dtoBasic = new DtoBasic()
+        dtoBasic.email = "touhid@email.local"
+
+        dtoBasic = objectCopier.copy(entityBasic, dtoBasic)
+
+
+        then:
+        assert dtoBasic.other == entityBasic.name
+
+    }
+
 }
