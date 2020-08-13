@@ -1,3 +1,41 @@
+= Object Copier
+
+== FAQ
+* What will happen if both side annotated?
+* DTO is annotated but not Entity so what will happen when copy Entity to DTO?
+
+== Interface ProcessCustomCopy<S, D>
+If we need any custom processing during the copy object then we can use this interface. It will work like below ways:
+
+* Will call only once if we Implement it.
+* It can call for each field during copy process. Just using customProcess =  true from annotation.
+
+=== ProcessCustomCopy<S, D> Methods description
+* *meAsSrc(S source, D destination, String fieldName):* If enable for field then it will call one time when the field will copy and implementation placed as Source.
+* *meAsDst(D source, S destination, String fieldName):* If enable for field then it will call one time when the field will copy and implementation placed as Destination.
+* *meAsSrc(S source, D destination):* Will call once when implementation placed as Source.
+* *meAsDst(D source, S destination):* Will call once when implementation placed as Destination.
+
+== Copy Object
+
+* Available Annotation
+** DataMappingInfo
+*** name (Default: anonymous): It will use for excel sheet name or use as a csv file name.
+*** isStrict (Default: false): If isStrict true then copier will not copy if the dataMapping annotation not present or source not available.
+
+** DataMapping
+*** source (required): where to copy value and initialize annotated property using that value.
+*** customProcess (true/false) Default: false: will call the custom processor if custom processor implemented.
+*** name (Default: null): It will use for export and import value to serializable content such as csv, excel etc.
+
+
+* Entity to DTO
+** Entity Object to DTO Class
+** Entity Object to DTO Object
+** DTO Object to Entity Class
+** DTO Object to Entity Object
+
+
 * Copy Entity to DTO
 * Copy DTO to Entity
 * Export to CSV
