@@ -28,12 +28,7 @@ If we need any custom processing during the copy object then we can use this int
 *** customProcess (true/false) Default: false: will call the custom processor if custom processor implemented.
 *** name (Default: null): It will use for export and import value to serializable content such as csv, excel etc.
 
-
-== Export Import
-* If the Object is Nested then it will show like Address >> Id it's mean suppose to Person has an Object called Address
-inside of it.
-* Import will also parse the Address >> Id according to object.
-
+{blank} +
 
 == Copy Process
 * Parse Annotation Information
@@ -52,6 +47,14 @@ inside of it.
 ** Entity Object to DTO Object
 ** DTO Object to Entity Class
 ** DTO Object to Entity Object
+
+
+== Export Import
+* If the Object is Nested then it will show like Address >> Id it's mean suppose to Person has an Object called Address
+inside of it.
+* Import will also parse the Address >> Id according to object.
+
+
 
 
 * Copy Entity to DTO
