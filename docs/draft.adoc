@@ -35,7 +35,19 @@ inside of it.
 * Import will also parse the Address >> Id according to object.
 
 
-* Entity to DTO
+== Copy Process
+* Parse Annotation Information
+* Make Source Destination List
+* Perform Source Field to Destination Copy
+** If custom call then field will not copy call the custom Processor
+** If field is not primitive then process individually
+* Finally Call the custom method once.
+* Note
+** If source & destination both have mapping annotation then always destination mapping will get priority.
+** If source & destination will no mapping annotation then copy match property according to destination class.
+** If source & destination anyone has mapping then thai will consider as mapping.
+** If DataMappingInfo isStrict = true then nothing will copy if there is no mapping annotation.
+* Copy Criteria
 ** Entity Object to DTO Class
 ** Entity Object to DTO Object
 ** DTO Object to Entity Class
