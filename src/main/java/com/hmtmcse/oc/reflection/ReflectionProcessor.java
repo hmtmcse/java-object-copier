@@ -164,4 +164,13 @@ public class ReflectionProcessor {
         return new LinkedHashMap<>();
     }
 
+    public Boolean isMethodExist(Class<?> c, String name, Class<?>... parameterTypes) {
+        try {
+            c.getDeclaredMethod(name, parameterTypes);
+            return true;
+        } catch (NoSuchMethodException ignore) {
+        }
+        return false;
+    }
+
 }
