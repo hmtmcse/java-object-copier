@@ -29,6 +29,12 @@ If we need any custom processing during the copy object then we can use this int
 *** name (Default: null): It will use for export and import value to serializable content such as csv, excel etc.
 
 
+== Export Import
+* If the Object is Nested then it will show like Address >> Id it's mean suppose to Person has an Object called Address
+inside of it.
+* Import will also parse the Address >> Id according to object.
+
+
 * Entity to DTO
 ** Entity Object to DTO Class
 ** Entity Object to DTO Object

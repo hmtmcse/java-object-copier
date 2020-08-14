@@ -13,4 +13,10 @@ public interface ProcessCustomCopy<S, D> {
 
     default void meAsDst(D source, S destination) {
     }
+
+    default void csvExport(S source, S destination) {
+    }
+
+    default void csvImport(D source, S destination) {
+    }
 }
