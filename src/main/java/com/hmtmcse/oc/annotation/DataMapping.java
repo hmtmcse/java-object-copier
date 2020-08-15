@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface DataMapping {
     public String source();
+    public boolean customProcess() default false;
 }
