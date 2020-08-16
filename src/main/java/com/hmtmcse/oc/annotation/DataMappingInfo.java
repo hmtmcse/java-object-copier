@@ -12,4 +12,5 @@ import java.lang.annotation.Target;
 public @interface DataMappingInfo {
     public boolean isStrict() default OCConstant.isStrictCopy;
     public String name() default OCConstant.copierDefaultName;
+    public Class<?> customProcessor() default void.class;
 }
