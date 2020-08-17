@@ -9,6 +9,7 @@ import com.hmtmcse.oc.common.ProcessCustomCopy;
 import com.hmtmcse.oc.data.*;
 import com.hmtmcse.oc.reflection.ReflectionProcessor;
 
+import javax.validation.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -36,12 +37,28 @@ public class ObjectCopier {
         }
     }
 
+    public LinkedHashMap<String, CopyReport> getErrorReports() {
+        return this.errorReports;
+    }
+
+    public LinkedHashMap<String, String> validateObject(Object object) {
+        LinkedHashMap<String, String> errors = new LinkedHashMap<>();
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Object>> violations = validator.validate(object);
+        for (ConstraintViolation<Object> violation : violations) {
+            for (Path.Node node : violation.getPropertyPath()) {
+                errors.put(node.getName(), violation.getMessage());
+            }
+        }
+        return errors;
+    }
+
     private Boolean isValidateTypeOrReport(CopySourceDstField copySourceDstField, String nestedKey) {
         Boolean isValid = false;
         if (copySourceDstField.source == null) {
             addReport(copySourceDstField.sourceFieldName, CopyReportError.DST_PROPERTY_UNAVAILABLE.label, nestedKey);
-        }
-        if (copySourceDstField.destination == null) {
+        } else if (copySourceDstField.destination == null) {
             addReport(copySourceDstField.sourceFieldName, CopyReportError.DST_PROPERTY_UNAVAILABLE.label, nestedKey);
         } else if (copySourceDstField.source.getType() != copySourceDstField.destination.getType()) {
             addReport(copySourceDstField.source.getName(), CopyReportError.DATA_TYPE_MISMATCH.label, nestedKey);
@@ -125,8 +142,8 @@ public class ObjectCopier {
         return customCopy;
     }
 
-    private ObjectCopierInfo processInfo(Object object) {
-        ObjectCopierInfo objectCopierInfo = new ObjectCopierInfo();
+    private ObjectCopierInfoDetails processInfo(Object object) {
+        ObjectCopierInfoDetails objectCopierInfo = new ObjectCopierInfoDetails();
         objectCopierInfo.isStrictMapping = isStrictMapping(object.getClass());
         objectCopierInfo.mappingClassName = copierDefaultName(object.getClass());
         objectCopierInfo.processCustomCopy = initCustomProcessor(object);
@@ -154,13 +171,14 @@ public class ObjectCopier {
         return copySourceDstField;
     }
 
-    private List<CopySourceDstField> dstAnnotatedNotSrc(List<Field> dstFields, Object dataObject, String nestedKey) {
+    private List<CopySourceDstField> dstAnnotatedNotSrc(List<Field> dstFields, Object dataObject, String nestedKey, ObjectCopierInfoDetails objectCopierInfoDetails) {
         List<CopySourceDstField> list = new ArrayList<>();
         CopySourceDstField copySourceDstField;
         for (Field field : dstFields) {
             copySourceDstField = new CopySourceDstField();
             copySourceDstField.setDataObject(dataObject);
             copySourceDstField.setDestination(field);
+            copySourceDstField.isStrictMapping = objectCopierInfoDetails.isStrictMapping;
             copySourceDstField = getCopiableSrcDstField(copySourceDstField);
             if (isValidateTypeOrReport(copySourceDstField, nestedKey)) {
                 list.add(copySourceDstField);
@@ -169,13 +187,14 @@ public class ObjectCopier {
         return list;
     }
 
-    private List<CopySourceDstField> srcAnnotatedNotDst(List<Field> srcFields, Object dataObject, String nestedKey) {
+    private List<CopySourceDstField> srcAnnotatedNotDst(List<Field> srcFields, Object dataObject, String nestedKey, ObjectCopierInfoDetails objectCopierInfoDetails) {
         List<CopySourceDstField> list = new ArrayList<>();
         CopySourceDstField copySourceDstField;
         for (Field field : srcFields) {
             copySourceDstField = new CopySourceDstField();
             copySourceDstField.setDataObject(dataObject);
             copySourceDstField.setSource(field);
+            copySourceDstField.isStrictMapping = objectCopierInfoDetails.isStrictMapping;
             copySourceDstField = getCopiableSrcDstField(copySourceDstField);
             if (isValidateTypeOrReport(copySourceDstField, nestedKey)) {
                 list.add(copySourceDstField);
@@ -184,32 +203,32 @@ public class ObjectCopier {
         return list;
     }
 
-    private List<CopySourceDstField> srcDstNotAnnotated(List<Field> fields, Object dataObject, String nestedKey) {
-        return dstAnnotatedNotSrc(fields, dataObject, nestedKey);
+    private List<CopySourceDstField> srcDstNotAnnotated(List<Field> fields, Object dataObject, String nestedKey, ObjectCopierInfoDetails objectCopierInfoDetails) {
+        return dstAnnotatedNotSrc(fields, dataObject, nestedKey, objectCopierInfoDetails);
     }
 
     private ObjectCopierInfoDetails processDetailsInfo(Object sourceObject, Object destinationObject, String nestedKey) {
         Class<?> sourceClass = sourceObject.getClass();
         Class<?> destinationClass = destinationObject.getClass();
-        ObjectCopierInfoDetails objectCopierInfoDetails = (ObjectCopierInfoDetails) processInfo(destinationObject);
+        ObjectCopierInfoDetails objectCopierInfoDetails = processInfo(destinationObject);
         objectCopierInfoDetails.amIDestination = true;
 
         List<Field> toKlassFields = reflectionProcessor.getAllField(destinationClass);
         if (isDataMapperAnnotationAvailable(toKlassFields)) {
-            objectCopierInfoDetails.copySourceDstFields = dstAnnotatedNotSrc(toKlassFields, sourceObject, nestedKey);
+            objectCopierInfoDetails.copySourceDstFields = dstAnnotatedNotSrc(toKlassFields, sourceObject, nestedKey, objectCopierInfoDetails);
             return objectCopierInfoDetails;
         }
 
         List<Field> fromObjectFields = reflectionProcessor.getAllField(sourceClass);
         if (isDataMapperAnnotationAvailable(fromObjectFields)) {
-            objectCopierInfoDetails = (ObjectCopierInfoDetails) processInfo(sourceObject);
+            objectCopierInfoDetails = processInfo(sourceObject);
             objectCopierInfoDetails.amIDestination = false;
-            objectCopierInfoDetails.copySourceDstFields = srcAnnotatedNotDst(fromObjectFields, sourceObject, nestedKey);
+            objectCopierInfoDetails.copySourceDstFields = srcAnnotatedNotDst(fromObjectFields, sourceObject, nestedKey, objectCopierInfoDetails);
             return objectCopierInfoDetails;
         }
 
         if (!objectCopierInfoDetails.isStrictMapping) {
-            objectCopierInfoDetails.copySourceDstFields = srcDstNotAnnotated(toKlassFields, sourceObject, nestedKey);
+            objectCopierInfoDetails.copySourceDstFields = srcDstNotAnnotated(toKlassFields, sourceObject, nestedKey, objectCopierInfoDetails);
         }
 
         return objectCopierInfoDetails;
@@ -302,23 +321,51 @@ public class ObjectCopier {
 //        return null;
 //    }
 
-/*
-* Both Side Object
-* Nested Object
-* Map
-* List
-* Set
-* Queue
-* */
+    /*
+     * Both Side Object
+     * Nested Object
+     * Map
+     * List
+     * Set
+     * Queue
+     * */
+
+    private Object processAndGetValue(Object source, Object destination) {
+        if (source == null) {
+            return null;
+        } else if (reflectionProcessor.isPrimitive(source.getClass())) {
+            return source;
+        }
+        return null;
+    }
+
+    public Object getFieldValue(Object data, Field field) throws IllegalAccessException {
+        if (field != null && data != null) {
+            return field.get(data);
+        }
+        return null;
+    }
+
+    public Object getFieldValueOrObject(Object data, Field field) throws IllegalAccessException {
+        Object fieldValue = getFieldValue(data, field);
+        if (fieldValue == null) {
+            return reflectionProcessor.newInstance(field.getClass());
+        }
+        return fieldValue;
+    }
+
 
     private <D> D processCopy(Object source, D destination, String nestedKey) throws ObjectCopierException {
-        try{
-            if (source == null || destination == null){
+        try {
+            if (source == null || destination == null) {
                 return null;
             }
             ObjectCopierInfoDetails details = processDetailsInfo(source, destination, nestedKey);
+            Object sourceValue, destinationValue;
             for (CopySourceDstField copySourceDstField : details.copySourceDstFields) {
-//                copySourceDstField.destination.set(destination, processAndGetValue(source, copySourceDstField.source));
+                sourceValue = getFieldValue(source, copySourceDstField.source);
+                destinationValue = getFieldValueOrObject(destination, copySourceDstField.destination);
+                copySourceDstField.destination.set(destination, processAndGetValue(sourceValue, destinationValue));
             }
             return destination;
         } catch (IllegalAccessException e) {
@@ -340,5 +387,6 @@ public class ObjectCopier {
     public <D> D copy(Object source, Class<D> destination) throws ObjectCopierException {
         return processCopy(source, destination, null);
     }
+
 
 }

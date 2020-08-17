@@ -1,6 +1,6 @@
 package com.hmtmcse.oc.test
 
-import com.hmtmcse.oc.copier.ObjectCopier2
+import com.hmtmcse.oc.copier.ObjectCopier
 import com.hmtmcse.oc.test.data.datatype.ObjectAndPrimitive
 import com.hmtmcse.oc.test.data.entitydto.DtoBasic
 import com.hmtmcse.oc.test.data.entitydto.EntityBasic
@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 class ObjectCopierTest extends Specification {
 
     @Shared
-    ObjectCopier2 objectCopier = new ObjectCopier2()
+    ObjectCopier objectCopier = new ObjectCopier()
 
     def "Test Collection Data Type"(){
         when:
@@ -165,7 +165,25 @@ class ObjectCopierTest extends Specification {
         assert true
     }
 
-    def "Test Object Entity to DTO copy"() {
+    def "Test Object Entity to DTO Object copy"() {
+        when:
+        EntityBasic entityBasic = new EntityBasic()
+        entityBasic.name = "Bismillah"
+        entityBasic.id =  12345;
+
+        DtoBasic dtoBasic = new DtoBasic()
+        dtoBasic.email = "touhid@email.local"
+
+        dtoBasic = objectCopier.copy(entityBasic, dtoBasic)
+
+
+        then:
+        assert dtoBasic.other == entityBasic.name
+        assert dtoBasic.id == entityBasic.id
+
+    }
+
+    def "Test Nested Object Entity to DTO Object copy"() {
         when:
         EntityBasic entityBasic = new EntityBasic()
         entityBasic.name = "Bismillah"

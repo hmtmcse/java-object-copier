@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface DataMappingInfo {
-    public boolean isStrict() default OCConstant.isStrictCopy;
-    public String name() default OCConstant.copierDefaultName;
+    public boolean isStrict() default true;
+    public String name() default "anonymous";
     public Class<?> customProcessor() default void.class;
 }

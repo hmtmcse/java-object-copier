@@ -6,4 +6,6 @@ public class EntityBasic {
     public String name;
     public String other;
 
+    public ValidationDto validationDto;
+
 }
