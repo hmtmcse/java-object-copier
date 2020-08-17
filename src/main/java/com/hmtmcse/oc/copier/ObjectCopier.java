@@ -215,92 +215,101 @@ public class ObjectCopier {
         return objectCopierInfoDetails;
     }
 
-    private Object processMap(Object sourceObject, Class<?> destinationProperty) throws IllegalAccessException, ObjectCopierException {
-        if (sourceObject == null || destinationProperty == null) {
-            return null;
-        }
-        Map<?, ?> map = (Map<?, ?>) sourceObject;
-        Map response = reflectionProcessor.instanceOfMap(destinationProperty);
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            response.put(processAndGetValue(entry.getKey(), entry.getKey().getClass()), processAndGetValue(entry.getValue(), entry.getValue().getClass()));
-        }
-        if (response.size() == 0) {
-            return null;
-        }
-        return response;
-    }
+//    private Object processMap(Object sourceObject, Class<?> destinationProperty) throws IllegalAccessException, ObjectCopierException {
+//        if (sourceObject == null || destinationProperty == null) {
+//            return null;
+//        }
+//        Map<?, ?> map = (Map<?, ?>) sourceObject;
+//        Map response = reflectionProcessor.instanceOfMap(destinationProperty);
+//        for (Map.Entry<?, ?> entry : map.entrySet()) {
+//            response.put(processAndGetValue(entry.getKey(), entry.getKey().getClass()), processAndGetValue(entry.getValue(), entry.getValue().getClass()));
+//        }
+//        if (response.size() == 0) {
+//            return null;
+//        }
+//        return response;
+//    }
+//
+//    private Object processList(Object sourceObject, Class<?> destinationProperty) throws IllegalAccessException, ObjectCopierException {
+//        if (sourceObject == null || destinationProperty == null) {
+//            return null;
+//        }
+//        Collection<?> list = (Collection<?>) sourceObject;
+//        Collection response = reflectionProcessor.instanceOfList(destinationProperty);
+//        for (Object data : list) {
+//            if (data != null) {
+//                response.add(processAndGetValue(data, data.getClass()));
+//            }
+//        }
+//        if (response.size() == 0) {
+//            return null;
+//        }
+//        return response;
+//    }
+//
+//    private Object processSet(Object sourceObject, Class<?> destinationProperty) throws ObjectCopierException, IllegalAccessException {
+//        if (sourceObject == null || destinationProperty == null) {
+//            return null;
+//        }
+//        Set<?> list = (Set<?>) sourceObject;
+//        Set response = reflectionProcessor.instanceOfSet(destinationProperty);
+//        for (Object data : list) {
+//            if (data != null) {
+//                response.add(processAndGetValue(data, data.getClass()));
+//            }
+//        }
+//        if (response.size() == 0) {
+//            return null;
+//        }
+//        return response;
+//    }
+//
+//    private Object processQueue(Object sourceObject, Class<?> destinationProperty) throws ObjectCopierException, IllegalAccessException {
+//        if (sourceObject == null || destinationProperty == null) {
+//            return null;
+//        }
+//        Queue<?> list = (Queue<?>) sourceObject;
+//        Queue response = reflectionProcessor.instanceOfQueue(destinationProperty);
+//        for (Object data : list) {
+//            if (data != null) {
+//                response.add(processAndGetValue(data, data.getClass()));
+//            }
+//        }
+//        if (response.size() == 0) {
+//            return null;
+//        }
+//        return response;
+//    }
 
-    private Object processList(Object sourceObject, Class<?> destinationProperty) throws IllegalAccessException, ObjectCopierException {
-        if (sourceObject == null || destinationProperty == null) {
-            return null;
-        }
-        Collection<?> list = (Collection<?>) sourceObject;
-        Collection response = reflectionProcessor.instanceOfList(destinationProperty);
-        for (Object data : list) {
-            if (data != null) {
-                response.add(processAndGetValue(data, data.getClass()));
-            }
-        }
-        if (response.size() == 0) {
-            return null;
-        }
-        return response;
-    }
+//    private Object processAndGetValue(Object object, Field field) throws IllegalAccessException, ObjectCopierException {
+//        Object fieldValue = field.get(object);
+//        Class<?> fieldClass = field.getClass();
+//
+//        if (fieldValue == null) {
+//            return null;
+//        } else if (reflectionProcessor.isPrimitive(fieldClass)) {
+//            return fieldValue;
+//        } else if (reflectionProcessor.isMap(fieldClass)) {
+//            return processMap(fieldValue, fieldClass);
+//        } else if (reflectionProcessor.isList(fieldClass)) {
+//            return processList(fieldValue, fieldClass);
+//        } else if (reflectionProcessor.isSet(fieldClass)) {
+//            return processSet(fieldValue, fieldClass);
+//        } else if (reflectionProcessor.isQueue(fieldClass)) {
+//            return processQueue(fieldValue, fieldClass);
+//        }
+//
+//        return null;
+//    }
 
-    private Object processSet(Object sourceObject, Class<?> destinationProperty) throws ObjectCopierException, IllegalAccessException {
-        if (sourceObject == null || destinationProperty == null) {
-            return null;
-        }
-        Set<?> list = (Set<?>) sourceObject;
-        Set response = reflectionProcessor.instanceOfSet(destinationProperty);
-        for (Object data : list) {
-            if (data != null) {
-                response.add(processAndGetValue(data, data.getClass()));
-            }
-        }
-        if (response.size() == 0) {
-            return null;
-        }
-        return response;
-    }
-
-    private Object processQueue(Object sourceObject, Class<?> destinationProperty) throws ObjectCopierException, IllegalAccessException {
-        if (sourceObject == null || destinationProperty == null) {
-            return null;
-        }
-        Queue<?> list = (Queue<?>) sourceObject;
-        Queue response = reflectionProcessor.instanceOfQueue(destinationProperty);
-        for (Object data : list) {
-            if (data != null) {
-                response.add(processAndGetValue(data, data.getClass()));
-            }
-        }
-        if (response.size() == 0) {
-            return null;
-        }
-        return response;
-    }
-
-    private Object processAndGetValue(Object object, Field field) throws IllegalAccessException, ObjectCopierException {
-        Object fieldValue = field.get(object);
-        Class<?> fieldClass = field.getClass();
-
-        if (fieldValue == null) {
-            return null;
-        } else if (reflectionProcessor.isPrimitive(fieldClass)) {
-            return fieldValue;
-        } else if (reflectionProcessor.isMap(fieldClass)) {
-            return processMap(fieldValue, fieldClass);
-        } else if (reflectionProcessor.isList(fieldClass)) {
-            return processList(fieldValue, fieldClass);
-        } else if (reflectionProcessor.isSet(fieldClass)) {
-            return processSet(fieldValue, fieldClass);
-        } else if (reflectionProcessor.isQueue(fieldClass)) {
-            return processQueue(fieldValue, fieldClass);
-        }
-
-        return null;
-    }
+/*
+* Both Side Object
+* Nested Object
+* Map
+* List
+* Set
+* Queue
+* */
 
     private <D> D processCopy(Object source, D destination, String nestedKey) throws ObjectCopierException {
         try{
@@ -309,7 +318,7 @@ public class ObjectCopier {
             }
             ObjectCopierInfoDetails details = processDetailsInfo(source, destination, nestedKey);
             for (CopySourceDstField copySourceDstField : details.copySourceDstFields) {
-                copySourceDstField.destination.set(destination, processAndGetValue(source, copySourceDstField.source));
+//                copySourceDstField.destination.set(destination, processAndGetValue(source, copySourceDstField.source));
             }
             return destination;
         } catch (IllegalAccessException e) {

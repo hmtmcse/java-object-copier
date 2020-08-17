@@ -34,4 +34,11 @@ public class CopySourceDstField {
         this.dataObject = dataObject;
         return this;
     }
+
+    public Object getFieldValue(Object data, Field field) throws IllegalAccessException {
+        if (field != null && data != null) {
+            return field.get(data);
+        }
+        return null;
+    }
 }
