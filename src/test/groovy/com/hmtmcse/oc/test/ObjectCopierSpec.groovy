@@ -12,7 +12,7 @@ import spock.lang.Specification
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class ObjectCopierTest extends Specification {
+class ObjectCopierSpec extends Specification {
 
     @Shared
     ObjectCopier objectCopier = new ObjectCopier()

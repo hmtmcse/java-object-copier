@@ -287,14 +287,6 @@ public class ObjectCopier {
         return response;
     }
 
-    /*
-     * Map
-     * List
-     * Set
-     * Queue
-     * */
-
-
     private Object processList(Object sourceObject, Class<?> destinationProperty) throws IllegalAccessException, ObjectCopierException {
         if (sourceObject == null || destinationProperty == null) {
             return null;
