@@ -1,5 +1,8 @@
-package com.hmtmcse.oc.test.data;
+package com.hmtmcse.oc.test;
 
+
+import com.hmtmcse.oc.test.data.Gender;
+import com.hmtmcse.oc.test.data.Student;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
