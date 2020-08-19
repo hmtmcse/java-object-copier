@@ -1,4 +1,6 @@
-package com.hmtmcse.oc.test.data.project;
+package com.hmtmcse.oc.test.data.ftest.project;
+
+import com.hmtmcse.oc.test.data.ftest.Base;
 
 public class Department extends Base {
 
