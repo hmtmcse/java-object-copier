@@ -1,7 +1,10 @@
 package com.hmtmcse.oc.test.data.entitydto;
 
+import com.hmtmcse.oc.annotation.DataMappingInfo;
+
 import javax.validation.constraints.*;
 
+@DataMappingInfo(isStrict = false)
 public class ValidationDto {
 
 

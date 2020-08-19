@@ -189,8 +189,38 @@ class ObjectCopierTest extends Specification {
         entityBasic.name = "Bismillah"
         entityBasic.id =  12345;
 
+        ValidationDto validationDto = new ValidationDto()
+        validationDto.name = "Validation"
+        validationDto.email = "validation@email.local"
+        entityBasic.validationDto = validationDto
+
+
         DtoBasic dtoBasic = new DtoBasic()
         dtoBasic.email = "touhid@email.local"
+
+        dtoBasic = objectCopier.copy(entityBasic, dtoBasic)
+
+
+        then:
+        assert dtoBasic.other == entityBasic.name
+
+    }
+
+    def "Test Nested Object Entity to DTO Object has value copy"() {
+        when:
+        EntityBasic entityBasic = new EntityBasic()
+        entityBasic.name = "Bismillah"
+        entityBasic.id =  12345;
+
+        ValidationDto validationDto = new ValidationDto()
+        validationDto.name = "Validation"
+        validationDto.email = "validation@email.local"
+
+
+
+        DtoBasic dtoBasic = new DtoBasic()
+        dtoBasic.email = "touhid@email.local"
+        dtoBasic.validationDto = validationDto
 
         dtoBasic = objectCopier.copy(entityBasic, dtoBasic)
 
