@@ -65,9 +65,6 @@ public class ObjectCopier {
         } else {
             isValid = true;
         }
-        // list
-        // map
-        // set
         return isValid;
     }
 
@@ -131,25 +128,25 @@ public class ObjectCopier {
         return null;
     }
 
-    private ProcessCustomCopy<?, ?> initCustomProcessor(Object object) {
+    private <S, D> ProcessCustomCopy<S, D> initCustomProcessor(Object object, S sourceObject, D destinationObject) {
         Class<?> callbackClass = customProcessor(object.getClass());
         if (callbackClass == null || !ProcessCustomCopy.class.isAssignableFrom(callbackClass)) {
             return null;
         }
-        ProcessCustomCopy<?, ?> customCopy = null;
+        ProcessCustomCopy<S, D> customCopy = null;
         if (initCustomProcessor != null) {
-            customCopy = initCustomProcessor.init(callbackClass);
+            customCopy = initCustomProcessor.init(callbackClass, sourceObject, destinationObject);
         } else {
-            customCopy = (ProcessCustomCopy<?, ?>) reflectionProcessor.newInstance(callbackClass);
+            customCopy = (ProcessCustomCopy<S, D>) reflectionProcessor.newInstance(callbackClass);
         }
         return customCopy;
     }
 
-    private ObjectCopierInfoDetails processInfo(Object object) {
-        ObjectCopierInfoDetails objectCopierInfo = new ObjectCopierInfoDetails();
+    private <S, D> ObjectCopierInfoDetails processInfo(Object object, S sourceObject, D destinationObject) {
+        ObjectCopierInfoDetails<S, D> objectCopierInfo = new ObjectCopierInfoDetails<>();
         objectCopierInfo.isStrictMapping = isStrictMapping(object.getClass());
         objectCopierInfo.mappingClassName = copierDefaultName(object.getClass());
-        objectCopierInfo.processCustomCopy = initCustomProcessor(object);
+        objectCopierInfo.processCustomCopy = initCustomProcessor(object, sourceObject, destinationObject);
         return objectCopierInfo;
     }
 
@@ -210,21 +207,22 @@ public class ObjectCopier {
         return dstAnnotatedNotSrc(fields, dataObject, nestedKey, objectCopierInfoDetails);
     }
 
-    private ObjectCopierInfoDetails processDetailsInfo(Object sourceObject, Object destinationObject, String nestedKey) {
+    private <S, D> ObjectCopierInfoDetails processDetailsInfo(S sourceObject, D destinationObject, String nestedKey) {
         Class<?> sourceClass = sourceObject.getClass();
         Class<?> destinationClass = destinationObject.getClass();
-        ObjectCopierInfoDetails objectCopierInfoDetails = processInfo(destinationObject);
+        ObjectCopierInfoDetails<S, D> objectCopierInfoDetails = processInfo(destinationObject, sourceObject, destinationObject);
         objectCopierInfoDetails.amIDestination = true;
 
         List<Field> toKlassFields = reflectionProcessor.getAllField(destinationClass);
-        if (isDataMapperAnnotationAvailable(toKlassFields)) {
+        if (isDataMappingInfoAnnotation(destinationClass) || isDataMapperAnnotationAvailable(toKlassFields)) {
             objectCopierInfoDetails.copySourceDstFields = dstAnnotatedNotSrc(toKlassFields, sourceObject, nestedKey, objectCopierInfoDetails);
             return objectCopierInfoDetails;
         }
 
+        objectCopierInfoDetails = processInfo(sourceObject, sourceObject, destinationObject);
         List<Field> fromObjectFields = reflectionProcessor.getAllField(sourceClass);
-        if (isDataMapperAnnotationAvailable(fromObjectFields)) {
-            objectCopierInfoDetails = processInfo(sourceObject);
+        if (isDataMappingInfoAnnotation(sourceClass) || isDataMapperAnnotationAvailable(fromObjectFields)) {
+            objectCopierInfoDetails = processInfo(sourceObject, sourceObject, destinationObject);
             objectCopierInfoDetails.amIDestination = false;
             objectCopierInfoDetails.copySourceDstFields = srcAnnotatedNotDst(fromObjectFields, destinationObject, nestedKey, objectCopierInfoDetails);
             return objectCopierInfoDetails;
@@ -345,20 +343,21 @@ public class ObjectCopier {
     }
 
 
-    private <D> D processCopy(Object source, D destination, String nestedKey) throws ObjectCopierException {
+    private <S, D> D processCopy(S source, D destination, String nestedKey) throws ObjectCopierException {
         try {
 
             if (source == null || destination == null) {
                 return null;
             }
 
-            ObjectCopierInfoDetails details = processDetailsInfo(source, destination, nestedKey);
+            ObjectCopierInfoDetails<S, D> details = processDetailsInfo(source, destination, nestedKey);
             Object sourceValue, destinationValue;
             for (CopySourceDstField copySourceDstField : details.copySourceDstFields) {
                 sourceValue = getFieldValue(source, copySourceDstField.source);
                 destinationValue = getFieldValueOrObject(destination, copySourceDstField.destination);
                 copySourceDstField.destination.set(destination, processAndGetValue(sourceValue, destinationValue, copySourceDstField.destination.getType()));
             }
+            details.callGlobalCallBack(source, destination);
             return destination;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -366,17 +365,17 @@ public class ObjectCopier {
         }
     }
 
-    private <D> D processCopy(Object source, Class<D> klass, String nestedKey) throws ObjectCopierException {
+    private <S, D> D processCopy(S source, Class<D> klass, String nestedKey) throws ObjectCopierException {
         D toInstance = reflectionProcessor.newInstance(klass);
         return processCopy(source, toInstance, nestedKey);
     }
 
 
-    public <D> D copy(Object source, D destination) throws ObjectCopierException {
+    public <S, D> D copy(S source, D destination) throws ObjectCopierException {
         return processCopy(source, destination, null);
     }
 
-    public <D> D copy(Object source, Class<D> destination) throws ObjectCopierException {
+    public <S, D> D copy(S source, Class<D> destination) throws ObjectCopierException {
         return processCopy(source, destination, null);
     }
 

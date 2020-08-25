@@ -1,5 +1,5 @@
 package com.hmtmcse.oc.common;
 
 public interface InitCustomProcessor {
-    public ProcessCustomCopy<?,?> init(Class<?> klass);
+    <S, D> ProcessCustomCopy<S, D> init(Class<?> klass, S source, D destination);
 }
