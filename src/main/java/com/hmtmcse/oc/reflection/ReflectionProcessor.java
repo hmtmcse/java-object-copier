@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -108,7 +109,7 @@ public class ReflectionProcessor {
     public Boolean isPrimitive(Class<?> c) {
         return c.isPrimitive() || c == String.class || c == Boolean.class || c == Byte.class || c == Short.class || c == Character.class
                 || c == Integer.class || c == Float.class || c == Double.class || c == BigDecimal.class || c == BigInteger.class
-                || c == LocalDate.class || c == LocalDateTime.class || c == Date.class || c == Long.class;
+                || c == LocalDate.class || c == LocalDateTime.class || c == Date.class || c == Timestamp.class || c == Long.class;
     }
 
 
