@@ -1,22 +1,19 @@
 package com.hmtmcse.oc.common;
 
-public interface ProcessCustomCopy<S, D> {
+public interface ProcessCustomCopy<E, D> {
 
-    default void meAsSrc(S source, D destination, String fieldName) {
+    default void meAsSrc(D source, E destination) {
     }
 
-    default void meAsDst(D source, S destination, String fieldName) {
+    default void meAsDst(E source, D destination) {
     }
 
-    default void meAsSrc(S source, D destination) {
+    default void csvExport(E source, E destination) {
     }
 
-    default void meAsDst(D source, S destination) {
+    default void csvImport(D source, E destination) {
     }
 
-    default void csvExport(S source, S destination) {
-    }
-
-    default void csvImport(D source, S destination) {
+    default void whyNotCalled(String message) {
     }
 }

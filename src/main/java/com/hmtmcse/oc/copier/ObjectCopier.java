@@ -142,7 +142,7 @@ public class ObjectCopier {
         return customCopy;
     }
 
-    private <S, D> ObjectCopierInfoDetails processInfo(Object object, S sourceObject, D destinationObject) {
+    private <S, D> ObjectCopierInfoDetails<?, ?> processInfo(Object object, S sourceObject, D destinationObject) {
         ObjectCopierInfoDetails<S, D> objectCopierInfo = new ObjectCopierInfoDetails<>();
         objectCopierInfo.isStrictMapping = isStrictMapping(object.getClass());
         objectCopierInfo.mappingClassName = copierDefaultName(object.getClass());
@@ -207,10 +207,10 @@ public class ObjectCopier {
         return dstAnnotatedNotSrc(fields, dataObject, nestedKey, objectCopierInfoDetails);
     }
 
-    private <S, D> ObjectCopierInfoDetails processDetailsInfo(S sourceObject, D destinationObject, String nestedKey) {
+    private <S, D> ObjectCopierInfoDetails<?, ?> processDetailsInfo(S sourceObject, D destinationObject, String nestedKey) {
         Class<?> sourceClass = sourceObject.getClass();
         Class<?> destinationClass = destinationObject.getClass();
-        ObjectCopierInfoDetails<S, D> objectCopierInfoDetails = processInfo(destinationObject, sourceObject, destinationObject);
+        ObjectCopierInfoDetails<?, ?> objectCopierInfoDetails = processInfo(destinationObject, sourceObject, destinationObject);
         objectCopierInfoDetails.amIDestination = true;
 
         List<Field> toKlassFields = reflectionProcessor.getAllField(destinationClass);
@@ -350,7 +350,7 @@ public class ObjectCopier {
                 return null;
             }
 
-            ObjectCopierInfoDetails<S, D> details = processDetailsInfo(source, destination, nestedKey);
+            ObjectCopierInfoDetails<?, ?> details = processDetailsInfo(source, destination, nestedKey);
             Object sourceValue, destinationValue;
             for (CopySourceDstField copySourceDstField : details.copySourceDstFields) {
                 sourceValue = getFieldValue(source, copySourceDstField.source);
