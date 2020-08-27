@@ -2,6 +2,7 @@ package com.hmtmcse.oc.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -165,13 +166,34 @@ public class ReflectionProcessor {
         return new LinkedHashMap<>();
     }
 
+    public Method getMethod(Class<?> c, String name, Class<?>... parameterTypes) throws NoSuchMethodException {
+      return c.getDeclaredMethod(name, parameterTypes);
+    }
+
     public Boolean isMethodExist(Class<?> c, String name, Class<?>... parameterTypes) {
         try {
-            c.getDeclaredMethod(name, parameterTypes);
+            getMethod(c, name, parameterTypes);
             return true;
         } catch (NoSuchMethodException ignore) {
         }
         return false;
+    }
+
+    public Object invokeMethod(Object object, String name, Object... parameterTypes) {
+        try {
+            int paramLength = parameterTypes.length;
+            Class<?>[] classes = new Class[paramLength];
+            for (int i = 0; i < paramLength; i++){
+                classes[i] = parameterTypes[i].getClass();
+            }
+            Method method = getMethod(object.getClass(), name, classes);
+            if (method != null){
+                return method.invoke(object, parameterTypes);
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

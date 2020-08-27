@@ -2,11 +2,9 @@ package com.hmtmcse.oc.common;
 
 public interface ProcessCustomCopy<E, D> {
 
-    default void meAsSrc(D source, E destination) {
-    }
+    void meAsSrc(D source, E destination);
 
-    default void meAsDst(E source, D destination) {
-    }
+    void meAsDst(E source, D destination);
 
     default void csvExport(E source, E destination) {
     }

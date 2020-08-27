@@ -22,9 +22,9 @@ public class ObjectCopierInfoDetails<S, D> {
 
     public Boolean callMeAsDst(Object source, Object destination) {
         if (reflectionProcessor.isMethodExist(processCustomCopy.getClass(), "meAsDst", destination.getClass(), source.getClass())) {
-            processCustomCopy.meAsDst(destination, source);
+            reflectionProcessor.invokeMethod(processCustomCopy, "meAsDst", destination, source);
         } else if (reflectionProcessor.isMethodExist(processCustomCopy.getClass(), "meAsDst", source.getClass(), destination.getClass())) {
-            processCustomCopy.meAsDst(source, destination);
+            reflectionProcessor.invokeMethod(processCustomCopy, "meAsDst", source, destination);
         } else {
             return false;
         }
@@ -33,9 +33,9 @@ public class ObjectCopierInfoDetails<S, D> {
 
     public Boolean callMeAsSst(Object source, Object destination) {
         if (reflectionProcessor.isMethodExist(processCustomCopy.getClass(), "meAsSrc", destination.getClass(), source.getClass())) {
-            processCustomCopy.meAsSrc(destination, source);
+            reflectionProcessor.invokeMethod(processCustomCopy, "meAsSrc", destination, source);
         } else if (reflectionProcessor.isMethodExist(processCustomCopy.getClass(), "meAsSrc", source.getClass(), destination.getClass())) {
-            processCustomCopy.meAsSrc(source, destination);
+            reflectionProcessor.invokeMethod(processCustomCopy, "meAsSrc", source, destination);
         } else {
             return false;
         }
