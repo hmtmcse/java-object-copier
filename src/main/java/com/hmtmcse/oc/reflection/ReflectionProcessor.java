@@ -183,15 +183,21 @@ public class ReflectionProcessor {
         try {
             int paramLength = parameterTypes.length;
             Class<?>[] classes = new Class[paramLength];
-            for (int i = 0; i < paramLength; i++){
+            for (int i = 0; i < paramLength; i++) {
                 classes[i] = parameterTypes[i].getClass();
             }
             Method method = getMethod(object.getClass(), name, classes);
-            if (method != null){
+            if (method != null) {
                 return method.invoke(object, parameterTypes);
             }
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException e) {
             e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            if (e.getCause() instanceof RuntimeException) {
+                throw (RuntimeException) e.getCause();
+            } else if (e.getCause() instanceof Error) {
+                throw (Error) e.getCause();
+            }
         }
         return null;
     }

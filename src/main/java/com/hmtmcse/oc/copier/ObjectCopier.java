@@ -351,13 +351,13 @@ public class ObjectCopier {
             }
 
             ObjectCopierInfoDetails<?, ?> details = processDetailsInfo(source, destination, nestedKey);
+            details.callGlobalCallBack(source, destination);
             Object sourceValue, destinationValue;
             for (CopySourceDstField copySourceDstField : details.copySourceDstFields) {
                 sourceValue = getFieldValue(source, copySourceDstField.source);
                 destinationValue = getFieldValueOrObject(destination, copySourceDstField.destination);
                 copySourceDstField.destination.set(destination, processAndGetValue(sourceValue, destinationValue, copySourceDstField.destination.getType()));
             }
-            details.callGlobalCallBack(source, destination);
             return destination;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
